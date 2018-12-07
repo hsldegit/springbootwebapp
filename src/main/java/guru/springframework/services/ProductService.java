@@ -1,10 +1,13 @@
 package guru.springframework.services;
 
 
-import guru.springframework.domain.Product;
+import guru.springframework.domain.entity.Product;
+
+import java.util.List;
 
 public interface ProductService {
-    Iterable<Product> listAllProducts();
+
+    List<Product> listAllProducts();
 
     Product getProductById(Integer id);
 
