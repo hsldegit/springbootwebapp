@@ -1,6 +1,8 @@
 package guru.springframework.controllers;
 
+import com.alibaba.fastjson.JSONObject;
 import guru.springframework.domain.entity.Product;
+import guru.springframework.rabbitmq.MqSender;
 import guru.springframework.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,17 +14,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ProductController {
 
+    @Autowired
     private ProductService productService;
 
     @Autowired
-    public void setProductService(ProductService productService) {
-        this.productService = productService;
-    }
+    private MqSender mqSender;
 
     @RequestMapping(value = "/products", method = RequestMethod.GET)
     public String list(Model model){
         model.addAttribute("products", productService.listAllProducts());
-        System.out.println("Returning rpoducts:");
         return "products";
     }
 
@@ -46,10 +46,9 @@ public class ProductController {
 
     @RequestMapping(value = "product", method = RequestMethod.POST)
     public String saveProduct(Product product){
-
-        productService.saveProduct(product);
-
-        return "redirect:/product/" + product.getId();
+        //productService.saveProduct(product);
+        mqSender.sendMsg("exchange","keyB", JSONObject.toJSONString(product));
+        return "redirect:/products/";
     }
 
 }

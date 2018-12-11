@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class Product implements Serializable {
+
+
+
     private Integer id;
 
     private String description;
@@ -64,5 +67,17 @@ public class Product implements Serializable {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", price=" + price +
+                ", productId='" + productId + '\'' +
+                ", version='" + version + '\'' +
+                '}';
     }
 }
