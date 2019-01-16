@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 public class Product implements Serializable {
 
 
+    private static final long serialVersionUID = 4924970590361531477L;
+
 
     private Integer id;
 
