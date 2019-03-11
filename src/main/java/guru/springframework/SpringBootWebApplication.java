@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 //@ComponentScan(basePackages = { "guru.springframework" })
-//@MapperScan("guru.springframework.dao")
+//@MapperScan({"guru.springframework.dao","guru.springframework.dao.custom"})
 public class SpringBootWebApplication {
 
     public static void main(String[] args) {

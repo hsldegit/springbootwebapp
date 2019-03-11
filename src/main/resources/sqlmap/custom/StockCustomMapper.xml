@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="guru.springframework.dao.custom.StockCustomMapper">
+
+    <resultMap id="BaseResultMap" type="guru.springframework.domain.entity.Stock" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="in_stock_num" property="inStockNum" jdbcType="INTEGER" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="findByGoodsId"  resultMap="BaseResultMap"  flushCache="true" useCache="false">
+      SELECT * FROM stock WHERE product_id = #{productId}
+    </select>
+
+    <select id="findByGoodsId1"  resultMap="BaseResultMap"  flushCache="true" useCache="false">
+      SELECT * FROM stock WHERE product_id = #{productId} and  id > 0
+    </select>
+
+    <update id="updateStock">
+        UPDATE stock
+        SET in_stock_num = in_stock_num + #{stockChange}
+        WHERE
+            id = #{id}
+        AND in_stock_num + #{stockChange} > 0
+    </update>
+
+    <update id="updateStockWithVersion">
+        UPDATE stock
+        SET in_stock_num = in_stock_num + #{stockChange},
+         version = version + 1
+        WHERE
+            id = #{id}
+        AND version = #{version}
+        AND in_stock_num + #{stockChange} > 0
+    </update>
+</mapper>

@@ -133,6 +133,8 @@ public class UserController {
         executorService.shutdown();//关闭线程池
         long end = System.currentTimeMillis();
         System.out.println("test3总共耗时:" + (end - start) + "ms");
+
+        String s = new String("11111");
         return ResultUtil.success(result);
     }
 

@@ -3,6 +3,7 @@ package guru.springframework.druid;
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
+import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -23,11 +24,13 @@ import java.util.List;
 
 @Configuration
 @EnableConfigurationProperties({MyDruidDataSourceProperties.class})
-@MapperScan(value = {"guru.springframework.dao"}, sqlSessionFactoryRef = "mySqlSessionFactory")
+@MapperScan(value = {"guru.springframework.dao"})
 @ConditionalOnProperty(name = "druid.datasource.url", matchIfMissing = false)
 public class MyDruidDataSourceConfiguration {
 
-    static final String MAPPER_LOCATION = "classpath*:sqlmap/*Mapper.xml";
+    //static final String MAPPER_LOCATION = "classpath*:sqlmap/*Mapper.xml,classpath*:sqlmap/**/*.xml";
+
+    static final String MAPPER_LOCATION = "classpath*:sqlmap/**/*.xml";
 
     @Autowired
     private MyDruidDataSourceProperties myDataSourceProperties;
@@ -81,14 +84,15 @@ public class MyDruidDataSourceConfiguration {
         return new TransactionTemplate(platformTransactionManager);
     }
 
-    @Bean(name = "mySqlSessionFactory")
-    @ConditionalOnMissingBean(name = "mySqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("myDruidDataSource") DruidDataSource druidDataSource)
-            throws Exception {
-        final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        sessionFactory.setDataSource(druidDataSource);
-        sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATION));
-        return sessionFactory.getObject();
-
-    }
+//    @Bean(name = "mySqlSessionFactory")
+//    @ConditionalOnMissingBean(name = "mySqlSessionFactory")
+//    public SqlSessionFactory sqlSessionFactory(@Qualifier("myDruidDataSource") DruidDataSource druidDataSource)
+//            throws Exception {
+//        final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+//        sessionFactory.setDataSource(druidDataSource);
+//        //sessionFactory.setCache(Cache);
+//        sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATION));
+//        return sessionFactory.getObject();
+//
+//    }
 }

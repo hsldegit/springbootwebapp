@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author huangshilu
@@ -42,7 +43,6 @@ public class MqSender implements RabbitTemplate.ReturnCallback {
                 System.out.println("sender 消息发送成功 ");
             }
         });
-
         this.rabbitTemplate.convertAndSend(exchange, routingKey, context, correlationDataSend);
     }
 
