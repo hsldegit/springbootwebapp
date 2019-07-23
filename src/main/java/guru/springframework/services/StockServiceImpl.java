@@ -6,6 +6,8 @@ import guru.springframework.repositories.StockChangeRepository;
 import guru.springframework.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2019/3/7 11:24
  * @description
  */
+
 @Service
 public class StockServiceImpl implements StockService {
 
@@ -21,6 +24,9 @@ public class StockServiceImpl implements StockService {
 
     @Autowired
     private StockChangeRepository stockChangeRepository;
+
+    @Autowired
+    private ProductService productService;
 
     @Override
     @Transactional(value = "myTransactionManager")
@@ -79,11 +85,6 @@ public class StockServiceImpl implements StockService {
         stockChangeObj.setProductId(goodsId);
         stockChangeObj.setChangeNum(stockChange);
         stockChangeRepository.insert(stockChangeObj);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         int result = stockRepository.updateStockWithVersion(stock.getId(), stockChange, stock.getVersion());
         if (result < 1) {
             System.out.println("版本号不对 再次尝试");
@@ -106,11 +107,6 @@ public class StockServiceImpl implements StockService {
         stockChangeObj.setProductId(goodsId);
         stockChangeObj.setChangeNum(stockChange);
         stockChangeRepository.insert(stockChangeObj);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         int result = stockRepository.updateStockWithVersion(stock.getId(), stockChange, stock.getVersion());
         if (result < 1) {
             System.out.println("版本号不对 再次尝试");
@@ -122,7 +118,7 @@ public class StockServiceImpl implements StockService {
 
 
     @Override
-    @Transactional(value = "myTransactionManager")
+    @Transactional(value = "myTransactionManager", isolation = Isolation.READ_COMMITTED)
     public boolean test(Long goodsId) throws InterruptedException {
         Stock stock1 = stockRepository.findStockByGoodsId(goodsId);
         System.out.println(stock1);
@@ -132,6 +128,25 @@ public class StockServiceImpl implements StockService {
         System.out.println(stock2);
         System.out.println(stock1 == stock2);
         return false;
+    }
+
+    @Override
+    @Transactional(propagation=Propagation.REQUIRED)
+    public void method1() {
+        int result = stockRepository.updateStock(2L, 1);
+        System.out.println("result=" + result);
+        try {
+            productService.method2();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Transactional(propagation=Propagation.REQUIRES_NEW)
+    public void method2() {
+        int result = stockRepository.updateStock(1L, 10);
+        System.out.println("result=" + result);
+        throw new RuntimeException();
     }
 
 

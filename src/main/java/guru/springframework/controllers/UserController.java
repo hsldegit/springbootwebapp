@@ -73,19 +73,21 @@ public class UserController {
 //    }
 
     @RequestMapping(value = "test1")
-    public Result test1() {
+    public static Result test1() {
         User user = new User();
         user.setName("aaa");
         user.setPwd("bbb");
         long start = System.currentTimeMillis();
+        List<User> list = new ArrayList<>();
         for (int i = 0; i < 10000; i++) {
             User user1 = new User();
             user1.setName(user.getName());
             user1.setPwd(user.getPwd());
+            list.add(user1);
         }
         long end = System.currentTimeMillis();
         System.out.println("test1总共耗时:" + (end - start) + "ms");
-        return ResultUtil.success();
+        return ResultUtil.success(list);
     }
 
 
@@ -95,12 +97,14 @@ public class UserController {
         user.setName("aaa");
         user.setPwd("bbb");
         long start = System.currentTimeMillis();
+        List<User> list = new ArrayList<>();
         for (int i = 0; i < 10000; i++) {
             User user1 = BeanUtil.copyProperties(user, User.class);
+            list.add(user1);
         }
         long end = System.currentTimeMillis();
         System.out.println("test2总共耗时:" + (end - start) + "ms");
-        return ResultUtil.success();
+        return ResultUtil.success(list);
     }
 
     /**

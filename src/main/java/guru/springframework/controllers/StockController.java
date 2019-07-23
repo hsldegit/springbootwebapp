@@ -1,6 +1,5 @@
 package guru.springframework.controllers;
 
-import guru.springframework.common.exception.StockVersionErrorException;
 import guru.springframework.common.response.Result;
 import guru.springframework.common.util.ResultUtil;
 import guru.springframework.services.StockService;
@@ -83,5 +82,16 @@ public class StockController {
         }
         return ResultUtil.success();
     }
+
+    @RequestMapping(value = "/stock/testTr")
+    public Result testTr() {
+        try {
+            stockService.method1();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResultUtil.success();
+    }
+
 
 }

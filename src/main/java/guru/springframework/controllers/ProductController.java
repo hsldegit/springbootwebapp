@@ -47,7 +47,8 @@ public class ProductController {
     @RequestMapping(value = "product", method = RequestMethod.POST)
     public String saveProduct(Product product){
         //productService.saveProduct(product);
-        mqSender.sendMsg("exchange","keyB", JSONObject.toJSONString(product));
+
+        //mqSender.sendMsg("exchange","keyB", JSONObject.toJSONString(product));
         return "redirect:/products/";
     }
 

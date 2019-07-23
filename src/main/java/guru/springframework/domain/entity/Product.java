@@ -1,8 +1,12 @@
 package guru.springframework.domain.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Version;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class Product implements Serializable {
 
@@ -19,6 +23,9 @@ public class Product implements Serializable {
     private BigDecimal price;
 
     private String productId;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date testDate;
 
     @Version
     private  String version;
@@ -69,6 +76,14 @@ public class Product implements Serializable {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public Date getTestDate() {
+        return testDate;
+    }
+
+    public void setTestDate(Date testDate) {
+        this.testDate = testDate;
     }
 
     @Override

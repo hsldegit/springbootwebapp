@@ -16,4 +16,6 @@ public interface StockService {
     int updateStockWithVersion2(Long goodsId, Integer stockChange);
 
     boolean test(Long  goodsId) throws InterruptedException;
+
+    void method1();
 }
